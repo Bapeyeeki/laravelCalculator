@@ -1,30 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kalkulator Laravel</title>
+    <title>Kalkulator JS</title>
 </head>
 <body>
-    <h1>Prosty Kalkulator</h1>
+    <h1>Prosty kalkulator (działa w przeglądarce)</h1>
 
-    <form method="POST" action="/calculate">
-        @csrf
-        <input type="number" name="a" value="{{ old('a', $a ?? '') }}" placeholder="Liczba A" required>
-        <input type="number" name="b" value="{{ old('b', $b ?? '') }}" placeholder="Liczba B" required>
-        <button type="submit">Dodaj</button>
-    </form>
+    <input type="number" id="a" placeholder="Liczba A">
+    <select id="operation">
+        <option value="add">+</option>
+        <option value="subtract">-</option>
+        <option value="multiply">*</option>
+        <option value="divide">/</option>
+    </select>
+    <input type="number" id="b" placeholder="Liczba B">
+    <button onclick="calculate()">Oblicz</button>
 
-    @if (isset($sum))
-        <h2>Wynik: {{ $a }} + {{ $b }} = {{ $sum }}</h2>
-    @endif
+    <h2 id="result"></h2>
 
-    @if ($errors->any())
-        <div style="color: red;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <script>
+        function calculate() {
+            const a = parseFloat(document.getElementById('a').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const op = document.getElementById('operation').value;
+            let result;
+
+            if (isNaN(a) || isNaN(b)) {
+                result = 'Podaj poprawne liczby';
+            } else {
+                switch (op) {
+                    case 'add':
+                        result = a + b;
+                        break;
+                    case 'subtract':
+                        result = a - b;
+                        break;
+                    case 'multiply':
+                        result = a * b;
+                        break;
+                    case 'divide':
+                        result = b === 0 ? 'Nie można dzielić przez zero' : a / b;
+                        break;
+                }
+            }
+
+            document.getElementById('result').innerText = `Wynik: ${result}`;
+        }
+    </script>
 </body>
 </html>
